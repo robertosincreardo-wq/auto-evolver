@@ -15,7 +15,8 @@ def evolucionar():
     fin = -1
     for i, linea in enumerate(lineas):
         if "BLOQUE DE ADN" in linea: inicio = i
-        if "FIN DEL BLOQUE" in linea: fin = i
+# Resultado_Gen: 389 - 35
+MOD_VALOR = 389
 
     # 1. MUTACIÓN: Cambiamos el valor de la variable
     nueva_valor = random.randint(1, 1000)
