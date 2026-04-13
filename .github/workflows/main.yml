@@ -1,0 +1,19 @@
+name: Programador Eterno
+on:
+  push:
+  schedule:
+    - cron: '*/30 * * * *' # Se ejecuta cada 30 minutos solo
+
+jobs:
+  evolve:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Mutar Código
+        run: |
+          python mutador.py
+          git config --global user.name 'Eterno'
+          git config --global user.email 'eterno@bot.com'
+          git add .
+          git commit -m "Evolución: Mutación detectada" || echo "Sin cambios"
+          git push
