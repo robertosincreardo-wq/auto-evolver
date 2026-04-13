@@ -1,20 +1,37 @@
 import random
-import os
 
-# 1. El programa lee su propio código
-with open("mutador.py", "r") as f:
-    lineas = f.readlines()
+FILENAME = "mutador.py"
 
-# 2. SELECCIÓN NATURAL: Elige una línea al azar para "mutar"
-# Solo mutamos líneas que tengan valores numéricos o strings simples
-idx = random.randint(0, len(lineas) - 1)
-if "MOD_" in lineas[idx]:
-    # Creamos un cambio aleatorio en una variable de control
+# --- BLOQUE DE ADN (El código mutará lo que esté aquí abajo) ---
+MOD_VALOR = 255
+# --- FIN DEL BLOQUE ---
+
+def evolucionar():
+    with open(FILENAME, "r") as f:
+        lineas = f.readlines()
+
+    # Buscamos dónde termina el bloque de ADN
+    inicio = -1
+    fin = -1
+    for i, linea in enumerate(lineas):
+        if "BLOQUE DE ADN" in linea: inicio = i
+        if "FIN DEL BLOQUE" in linea: fin = i
+
+    # 1. MUTACIÓN: Cambiamos el valor de la variable
     nueva_valor = random.randint(1, 1000)
-    lineas[idx] = f"MOD_VALOR = {nueva_valor} # Mutación automática\n"
+    lineas[inicio + 1] = f"MOD_VALOR = {nueva_valor}\n"
 
-# 3. El programa se escribe a sí mismo con el cambio
-with open("mutador.py", "w") as f:
-    f.writelines(lineas)
+    # 2. INVENCIÓN: Intentamos añadir una operación matemática aleatoria
+    # A veces el bot escribirá cosas que NO funcionan (esto es la selección natural)
+    operadores = ['+', '-', '*', '/']
+    operacion = f"# Resultado_Gen: {nueva_valor} {random.choice(operadores)} {random.randint(1, 100)}\n"
+    lineas.insert(fin, operacion)
 
-print("Mutación completada con éxito.")
+    with open(FILENAME, "w") as f:
+        f.writelines(lineas)
+
+if __name__ == "__main__":
+    evolucionar()
+    print("El código ha mutado. Verificando supervivencia...")
+    # Intentamos ejecutar la variable mutada para ver si el código sigue 'vivo'
+    print(f"Valor actual del ADN: {MOD_VALOR}")
